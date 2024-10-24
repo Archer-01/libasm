@@ -9,7 +9,7 @@ TEST_OBJ := $(TEST_SRC:.c=.o)
 ARFLAGS := rcs
 AS := nasm
 ASFLAGS := -f elf64
-CFLAGS := -Wall -Wextra -Werror -static
+CFLAGS := -fPIE -static-pie
 
 all: $(NAME)
 
