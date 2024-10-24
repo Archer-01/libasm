@@ -1,5 +1,5 @@
 NAME := libasm.a
-SRC := $(shell find . -type f -name *.s)
+SRC := $(shell find . -type f -name '*.s')
 OBJ := $(SRC:.s=.o)
 
 TEST_NAME := test
