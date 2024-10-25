@@ -1,21 +1,41 @@
 #include "libasm.h"
+#include <assert.h>
+#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#define TEST_STRLEN(s) printf("strlen: %2zu | ft_strlen: %2zu\n", strlen(s), ft_strlen(s))
-#define TEST_STRCPY(dst, src) printf("strcpy: \"%15s\" | ft_strcpy: \"%15s\"\n", strcpy(dst, src), ft_strcpy(dst, src))
+#define TEST_STRLEN(s) assert(strlen(s) == ft_strlen(s))
+#define TEST_STRCPY(dst, src) assert(strcmp(strcpy(dst, src), ft_strcpy(dst, src)) == 0)
+
+void	handler(int sig)
+{
+	if (sig == SIGABRT)
+	{
+		fputs("Some tests failed!\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+}
 
 int main(void)
 {
-	puts("ft_strlen --------------------------------");
-	TEST_STRLEN("");
-	TEST_STRLEN("libasm");
-	TEST_STRLEN("Hello, World!\n");
+	signal(SIGABRT, handler);
 
-	puts("\nft_strcpy --------------------------------");
-	char dst[BUFSIZ];
-	TEST_STRCPY(dst, "");
-	TEST_STRCPY(dst, "libasm");
-	TEST_STRCPY(dst, "Hello, World");
+	// ft_strlen
+	{
+		TEST_STRLEN("");
+		TEST_STRLEN("libasm");
+		TEST_STRLEN("Hello, World!\n");
+	}
+
+	// ft_strcpy
+	{
+		char dst[BUFSIZ];
+		TEST_STRCPY(dst, "");
+		TEST_STRCPY(dst, "libasm");
+		TEST_STRCPY(dst, "Hello, World");
+	}
+
+	puts("All tests passed");
 	return (0);
 }
