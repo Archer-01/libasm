@@ -12,7 +12,7 @@ ft_strdup:
 	je   return_null
 	push rdi
 	call ft_strlen
-	inc rax
+	inc  rax
 	mov  rdi, rax
 	call malloc
 	cmp  rax, 0

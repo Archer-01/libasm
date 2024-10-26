@@ -12,10 +12,10 @@ ft_read:
 	ret
 
 error:
-	neg rax
+	neg  rax
 	push rax
 	call __errno_location
-	pop rdi
-	mov [rax], rdi
-	mov rax, -1
+	pop  rdi
+	mov  [rax], rdi
+	mov  rax, -1
 	ret

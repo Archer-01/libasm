@@ -14,9 +14,9 @@ loop:
 	inc rdi
 	inc rsi
 	cmp cl, dl
-	jg ret_one
-	jl ret_negative_one
-	je loop
+	jg  ret_one
+	jl  ret_negative_one
+	je  loop
 
 test_s1:
 	cmp byte [rdi], 0
