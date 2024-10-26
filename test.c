@@ -76,6 +76,42 @@ int main(void)
 		}
 	}
 
+	// ft_read
+	{
+		/* Pre-tests setup */ {
+			const int fd = open("testfile", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+			write(fd, "libasm", 6);
+			close(fd);
+		}
+
+		/* Successful call */ {
+			char buf[BUFSIZ] = {'\0'};
+			const int fd = open("testfile", O_RDONLY, 0);
+			const ssize_t ret = ft_read(fd, buf, 6);
+			assert(ret == 6);
+			close(fd);
+		}
+
+		/* Bad file descriptor */ {
+			char buf[BUFSIZ] = {'\0'};
+			const ssize_t ret = ft_read(42, buf, 42);
+			assert(ret == -1);
+			assert(errno == EBADF);
+		}
+
+		/* Bad buffer */ {
+			const int fd = open("testfile", O_RDONLY, 0);
+			const ssize_t ret = ft_read(fd, NULL, 1);
+			assert(ret == -1);
+			assert(errno == EFAULT);
+			close(fd);
+		}
+
+		/* Post-test teardown */ {
+			unlink("testfile");
+		}
+	}
+
 	puts("All tests passed");
 	return (0);
 }
