@@ -112,6 +112,26 @@ int main(void)
 		}
 	}
 
+	// ft_strdup
+	{
+		/* Successful test */ {
+			const char *message = "libasm";
+			char *dup = ft_strdup(message);
+			assert(strcmp(message, dup) == 0);
+			free(dup);
+		}
+
+		/* Empty string */ {
+			char *dup = ft_strdup("");
+			assert(strcmp(dup, "") == 0);
+			free(dup);
+		}
+
+		/* NULL string */ {
+			assert(ft_strdup(NULL) == NULL);
+		}
+	}
+
 	puts("All tests passed");
 	return (0);
 }
