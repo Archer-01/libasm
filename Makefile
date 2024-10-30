@@ -1,41 +1,58 @@
-NAME      := libasm.a
-SRC       := $(shell find . -type f -name '*.s' -and -not -name '*_bonus.s')
-OBJ       := $(SRC:.s=.o)
-BONUS_SRC := $(shell find . -type f -name '*_bonus.s')
-BONUS_OBJ := $(BONUS_SRC:.s=.o)
+NAME    := libasm.a
+SRC     := $(wildcard *.s)
+TESTS   := test test_bonus
 
-TEST_NAME := test
-TEST_SRC  := test.c
-TEST_OBJ  := $(TEST_SRC:.c=.o)
+# ----------------------------------------
 
-BONUS_TEST_NAME := test_bonus
-BONUS_TEST_SRC  := test_bonus.c
-BONUS_TEST_OBJ  := $(BONUS_TEST_SRC:.c=.o)
-
-ARFLAGS := rcs
 AS      := nasm
 ASFLAGS := -f elf64
-CFLAGS  := -fPIE -static-pie
+ARFLAGS := rcs
+CFLAGS  := -fPIE
+LDFLAGS := -pie -static
+LDLIBS  := -L. -lasm
+
+# ----------------------------------------
+
+M_SRC   := $(filter-out %_bonus.s, $(SRC))
+M_OBJ   := $(M_SRC:.s=.o)
 
 all: $(NAME)
 
-bonus: $(OBJ) $(BONUS_OBJ)
-	$(AR) $(ARFLAGS) $(NAME) $^
-
-$(NAME): $(OBJ)
+$(NAME): $(M_OBJ)
 	$(AR) $(ARFLAGS) $@ $^
 
-$(TEST_NAME): $(NAME) $(TEST_OBJ)
-	$(CC) $(CFLAGS) $(TEST_OBJ) $(NAME) -o $@
+# ----------------------------------------
 
-$(BONUS_TEST_NAME): bonus $(BONUS_TEST_OBJ)
-	$(CC) $(CFLAGS) $(BONUS_TEST_OBJ) $(NAME) -o $@
+T_SRC   := test.c
+T_OBJ   := $(T_SRC:.c=.o)
+
+test: $(T_OBJ) $(NAME)
+
+# ----------------------------------------
+
+B_SRC   := $(filter %_bonus.s, $(SRC))
+B_OBJ   := $(B_SRC:.s=.o)
+
+bonus: $(B_OBJ) $(M_OBJ)
+	$(AR) $(ARFLAGS) $(NAME) $^
+
+$(B_OBJ): $(M_OBJ)
+
+# ----------------------------------------
+
+TB_SRC  := test_bonus.c
+TB_OBJ  := $(TB_SRC:.c=.o)
+
+test_bonus: $(TB_OBJ) bonus
+	$(CC) $(LDFLAGS) $< $(LDLIBS) -o $@
+
+# ----------------------------------------
 
 clean:
-	$(RM) $(OBJ) $(BONUS_OBJ) $(TEST_OBJ) $(BONUS_TEST_OBJ)
+	$(RM) *.o
 
 fclean: clean
-	$(RM) $(NAME) $(TEST_NAME) $(BONUS_TEST_NAME)
+	$(RM) $(NAME) $(TESTS)
 
 re: fclean all
 
