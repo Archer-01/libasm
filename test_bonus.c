@@ -76,6 +76,22 @@ int	main(void)
 		}
 	}
 
+	/* ft_list_size */ {
+		t_list	*head = NULL;
+		int		arr[] = {1, 21, 42};
+
+		assert(ft_list_size(head) == 0);
+
+		ft_list_push_front(&head, &arr[0]);
+		assert(ft_list_size(head) == 1);
+
+		ft_list_push_front(&head, &arr[1]);
+		assert(ft_list_size(head) == 2);
+
+		ft_list_push_front(&head, &arr[2]);
+		assert(ft_list_size(head) == 3);
+	}
+
 	puts("All tests passed");
 	return (0);
 }
