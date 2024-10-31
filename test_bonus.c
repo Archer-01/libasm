@@ -44,6 +44,38 @@ int	main(void)
 		TEST_ATOI_BASE("2a", hexadecimal, 0x2a);
 	}
 
+	/* ft_list_push_front */ {
+		t_list	*head = NULL;
+		int		arr[] = {1, 21, 42};
+
+		{
+			ft_list_push_front(&head, &arr[0]);
+			assert(head != NULL);
+			assert(*((int*)head->data) == arr[0]);
+			assert(head->next == NULL);
+		}
+
+		{
+			ft_list_push_front(&head, &arr[1]);
+			assert(head != NULL);
+			assert(*((int*)head->data) == arr[1]);
+			assert(head->next != NULL);
+			assert(*((int*)head->next->data) == arr[0]);
+			assert(head->next->next == NULL);
+		}
+
+		{
+			ft_list_push_front(&head, &arr[2]);
+			assert(head != NULL);
+			assert(*((int*)head->data) == arr[2]);
+			assert(head->next != NULL);
+			assert(*((int*)head->next->data) == arr[1]);
+			assert(head->next->next != NULL);
+			assert(*((int*)head->next->next->data) == arr[0]);
+			assert(head->next->next->next == NULL);
+		}
+	}
+
 	puts("All tests passed");
 	return (0);
 }
