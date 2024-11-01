@@ -15,6 +15,34 @@ void	handler(int sig)
 	}
 }
 
+int	cmp(void *a, void *b)
+{
+	int	*pa = a;
+	int	*pb= b;
+
+	if (*pa > *pb) {
+		return 1;
+	}
+	else if (*pa < *pb) {
+		return -1;
+	}
+	return 0;
+}
+
+int	rev_cmp(void *a, void *b)
+{
+	int	*pa = a;
+	int	*pb = b;
+
+	if (*pa > *pb) {
+		return -1;
+	}
+	else if (*pa < *pb) {
+		return 1;
+	}
+	return 0;
+}
+
 int	main(void)
 {
 	signal(SIGABRT, handler);
@@ -90,6 +118,32 @@ int	main(void)
 
 		ft_list_push_front(&head, &arr[2]);
 		assert(ft_list_size(head) == 3);
+	}
+
+	/* ft_list_sort */ {
+		t_list	*head = NULL;
+
+		ft_list_sort(&head, &cmp);
+		assert(head == NULL);
+
+		int	arr[] = {2, 3, 4, 1, 5};
+		for (int i = 0; i < 5; ++i) {
+			ft_list_push_front(&head, &arr[i]);
+		}
+
+		ft_list_sort(&head, &cmp);
+		assert(*((int*)head->data) == 1);
+		assert(*((int*)head->next->data) == 2);
+		assert(*((int*)head->next->next->data) == 3);
+		assert(*((int*)head->next->next->next->data) == 4);
+		assert(*((int*)head->next->next->next->next->data) == 5);
+
+		ft_list_sort(&head, &rev_cmp);
+		assert(*((int*)head->data) == 5);
+		assert(*((int*)head->next->data) == 4);
+		assert(*((int*)head->next->next->data) == 3);
+		assert(*((int*)head->next->next->next->data) == 2);
+		assert(*((int*)head->next->next->next->next->data) == 1);
 	}
 
 	puts("All tests passed");
