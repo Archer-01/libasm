@@ -43,6 +43,11 @@ int	rev_cmp(void *a, void *b)
 	return 0;
 }
 
+void	free_fct(void *ptr)
+{
+	(void) ptr;
+}
+
 int	main(void)
 {
 	signal(SIGABRT, handler);
@@ -144,6 +149,85 @@ int	main(void)
 		assert(*((int*)head->next->next->data) == 3);
 		assert(*((int*)head->next->next->next->data) == 2);
 		assert(*((int*)head->next->next->next->next->data) == 1);
+	}
+
+	/* ft_list_remove_if */ {
+		{
+			t_list	*head = NULL;
+			int	arr[] = {6, 5, 4, 3, 2, 1};
+
+			// Remove element from empty list
+			ft_list_remove_if(&head, &arr[0], &cmp, &free_fct);
+			assert(head == NULL);
+
+			for (int i = 1; i <= 5; ++i) {
+				ft_list_push_front(&head, &arr[i]);
+			}
+
+			// Remove first element
+			ft_list_remove_if(&head, &arr[5], &cmp, &free_fct);
+			assert(ft_list_size(head) == 4);
+			assert(*((int*)head->data) == 2);
+			assert(*((int*)head->next->data) == 3);
+			assert(*((int*)head->next->next->data) == 4);
+			assert(*((int*)head->next->next->next->data) == 5);
+			assert(head->next->next->next->next == NULL);
+
+			// Remove last element
+			ft_list_remove_if(&head, &arr[1], &cmp, &free_fct);
+			assert(ft_list_size(head) == 3);
+			assert(*((int*)head->data) == 2);
+			assert(*((int*)head->next->data) == 3);
+			assert(*((int*)head->next->next->data) == 4);
+			assert(head->next->next->next == NULL);
+
+			// Remove middle element
+			ft_list_remove_if(&head, &arr[3], &cmp, &free_fct);
+			assert(ft_list_size(head) == 2);
+			assert(*((int*)head->data) == 2);
+			assert(*((int*)head->next->data) == 4);
+			assert(head->next->next == NULL);
+
+			ft_list_remove_if(&head, &arr[4], &cmp, &free_fct);
+			assert(ft_list_size(head) == 1);
+			assert(*((int*)head->data) == 4);
+			assert(head->next == NULL);
+
+			// Remove non-existing element
+			ft_list_remove_if(&head, &arr[0], &cmp, &free_fct);
+			assert(ft_list_size(head) == 1);
+			assert(*((int*)head->data) == 4);
+			assert(head->next == NULL);
+
+			// Remove sole element
+			ft_list_remove_if(&head, &arr[2], &cmp, &free_fct);
+			assert(head == NULL);
+		}
+
+		{
+			t_list	*head = NULL;
+			int		arr[] = { 1, 2, 1, 3, 2, 3 };
+
+			for (int i = 0; i < 6; ++i) {
+				ft_list_push_front(&head, &arr[i]);
+			}
+
+
+			ft_list_remove_if(&head, &arr[0], &cmp, &free_fct);
+			assert(ft_list_size(head) == 4);
+			assert(*((int*)head->data) == 3);
+			assert(*((int*)head->next->data) == 2);
+			assert(*((int*)head->next->next->data) == 3);
+			assert(*((int*)head->next->next->next->data) == 2);
+
+			ft_list_remove_if(&head, &arr[1], &cmp, &free_fct);
+			assert(ft_list_size(head) == 2);
+			assert(*((int*)head->data) == 3);
+			assert(*((int*)head->next->data) == 3);
+
+			ft_list_remove_if(&head, &arr[3], &cmp, &free_fct);
+			assert(head == NULL);
+		}
 	}
 
 	puts("All tests passed");
