@@ -29,7 +29,7 @@ __list_create_elem:
 	;    rdi=data
 	push rdi
 	mov  rdi, 16
-	call malloc
+	call malloc wrt ..plt
 	pop  rdi
 	cmp  rax, 0
 	je   __malloc_failed

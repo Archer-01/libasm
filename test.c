@@ -58,7 +58,7 @@ int main(void)
 			const char *message = "libasm";
 			const int fd = open("/dev/null", O_WRONLY, 0);
 			const ssize_t ret = ft_write(fd, message, strlen(message));
-			assert(ret == strlen(message));
+			assert(ret == (ssize_t) strlen(message));
 			close(fd);
 		}
 

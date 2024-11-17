@@ -11,7 +11,7 @@ __check_base_len:
 	;    rdi=str, rsi=base
 	push rdi
 	mov  rdi, rsi
-	call ft_strlen
+	call ft_strlen wrt ..plt
 	pop  rdi
 	cmp  rax, 2
 	jl   __bad_base
@@ -63,10 +63,11 @@ __loop2_next:
 
 __pre_check_sign:
 	mov rcx, 0
+	mov r13, 1
 
 __check_sign:
 	;   Checks if str begins with a sign (+ or -)
-	;   rdi=str, rcx=loop index
+	;   rdi=str, rcx=loop index, r13=sign
 	cmp byte [rdi], '+'
 	je  __skip_sign_plus
 	cmp byte [rdi], '-'
@@ -77,17 +78,17 @@ __skip_sign_plus:
 	inc rcx
 
 __skip_sign_minus:
-	neg byte [sign]
+	neg r13
 	inc rcx
 
 __convert_num:
-	mov qword [baselen], rax
+	mov r12, rax
 	mov rax, 0
 	mov rcx, 0
 
 __loop3:
 	;    Convert str to an integer
-	;    rdi=str, rax=return value, rcx=loop counter
+	;    rdi=str, rax=return value, rcx=loop counter, r11=baselen
 	push rdi
 	push rcx
 	push rax
@@ -103,7 +104,7 @@ __loop3:
 	cmp  rbx, -1
 	je   __ret_value
 	;    rbx will hold the return value of __find_digit
-	imul rax, qword [baselen]
+	imul rax, r12
 	add  rax, rbx
 	inc  rcx
 	cmp  byte [rdi + rcx], 0
@@ -139,11 +140,3 @@ __find_digit_notfound:
 __find_digit_ret:
 	mov rax, rcx
 	ret
-
-section .data
-
-sign:
-	db 1
-
-baselen:
-	dq 0

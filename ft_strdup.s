@@ -14,7 +14,7 @@ ft_strdup:
 	call ft_strlen
 	inc  rax
 	mov  rdi, rax
-	call malloc
+	call malloc wrt ..plt
 	cmp  rax, 0
 	je   error
 	mov  rdi, rax
@@ -23,7 +23,7 @@ ft_strdup:
 	ret
 
 error:
-	call __errno_location
+	call __errno_location wrt ..plt
 	mov  eax, 12
 
 return_null:

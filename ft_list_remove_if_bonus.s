@@ -45,7 +45,7 @@ __found_target:
 	pop  rcx
 	mov  rdi, r11
 	push rcx
-	call free
+	call free wrt ..plt
 	pop  rcx
 	jmp  __loop
 
@@ -75,7 +75,7 @@ __found_target_at_beginning:
 	mov  rdi, qword [r11 + DATA]
 	call r15 ; call free_fct
 	mov  rdi, r11
-	call free
+	call free wrt ..plt
 	ret
 
 section .rodata

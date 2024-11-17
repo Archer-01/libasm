@@ -7,8 +7,8 @@ TESTS   := test test_bonus
 AS      := nasm
 ASFLAGS := -f elf64
 ARFLAGS := rcs
-CFLAGS  := -fPIE
-LDFLAGS := -pie -static
+CFLAGS  := -Wall -Wextra -Werror -fpie
+LDFLAGS := -pie
 LDLIBS  := -L. -lasm
 
 # ----------------------------------------

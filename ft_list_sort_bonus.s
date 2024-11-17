@@ -14,7 +14,7 @@ __sort:
 	jmp __outer_loop
 
 __outer_loop:
-	mov byte [swapped], 0
+	mov r12, 0
 	mov r9, qword [r8 + NEXT]
 	jmp __inner_loop
 
@@ -47,7 +47,7 @@ __inner_loop:
 	jmp __continue_inner_loop
 
 __swap:
-	mov byte [swapped], 1
+	mov r12, 1
 
 	push rdi
 	push rsi
@@ -75,7 +75,7 @@ __continue_inner_loop:
 	jmp __end_inner_loop
 
 __end_inner_loop:
-	cmp byte [swapped], 0
+	cmp r12, 0
 	je  __end
 	mov r8, qword [r8 + NEXT]
 	cmp r8, 0
@@ -84,11 +84,6 @@ __end_inner_loop:
 
 __end:
 	ret
-
-section .data
-
-swapped:
-	db 0
 
 section .rodata
 
